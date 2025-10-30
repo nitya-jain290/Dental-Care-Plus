@@ -1,0 +1,19 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Cancel Appointment</title>
+  <style>
+    body { font-family: Arial; text-align: center; margin-top: 50px; }
+    .msg { font-size: 20px; color: #444; }
+    a { display: inline-block; margin-top: 20px; text-decoration: none; color: white; background: #007BFF; padding: 10px 20px; border-radius: 5px; }
+    a:hover { background: #0056b3; }
+  </style>
+</head>
+<body>
+  <h1>Appointment Cancelled</h1>
+  <p class="msg">Your appointment has been successfully cancelled.</p>
+  <a href="{{ url_for('home') }}">Back to Home</a>
+
+</body>
+</html>

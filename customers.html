@@ -1,0 +1,104 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <title>Dental Care Plus - Patient List</title>
+
+  <!-- Font & Bootstrap -->
+  <script src="https://use.fontawesome.com/ae84af77c9.js"></script>
+  <link href="https://fonts.googleapis.com/css?family=Baloo" rel="stylesheet">
+  <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css">
+  <script src="https://code.jquery.com/jquery-3.6.0.min.js"></script>
+
+  <link rel="stylesheet" href="{{ url_for('static',filename='styles/style.css') }}">
+</head>
+
+<body>
+  <!-- Sidebar Navigation -->
+  <div class="sideNav">
+    <ul id="navElements">
+      <img id="logoNav" src="{{ url_for('static',filename='styles/logo.png') }}" alt="logo">
+      <a href="{{ url_for('home') }}"><li class="items"><i class="fa fa-home"></i></li></a>
+      <a href="{{ url_for('calendar') }}"><li class="items"><i class="fa fa-calendar"></i></li></a>
+      <a href="{{ url_for('add') }}"><li class="items"><i class="fa fa-plus-square-o"></i></li></a>
+      <a href="{{ url_for('customers') }}"><li class="items active"><i class="fa fa-users"></i></li></a>
+      <br><br>
+      <a href="{{ url_for('logout') }}"><li class="items"><i class="fa fa-sign-out"></i></li></a>
+    </ul>
+  </div>
+
+  <!-- Main Content -->
+  <div class="contentPane">
+    <h1 id="greeting">Dental Care Plus!</h1>
+    <br>
+
+    <div id="today">
+      <h2 class="todaySched">Patient List</h2>
+
+      <!-- Search Box -->
+      <form id="searchForm">
+        <h3>Search:</h3>
+        <input type="text" id="searchPatients" name="query" placeholder="Enter patient name..." class="form-control" style="width:300px;display:inline-block;">
+        <button type="submit" class="btn btn-primary">Search</button>
+      </form>
+      <br>
+
+      <!-- Results Table -->
+      <div id="searchPane">
+        <table class="table table-bordered">
+          <thead>
+            <tr>
+              <th>Appointment ID</th>
+              <th>Patient Name</th>
+              <th>Doctor Name</th>
+              <th>Date</th>
+              <th>Time</th>
+              <th>Status</th>
+            </tr>
+          </thead>
+          <tbody id="patientTableBody">
+            {% for row in patients %}
+            <tr>
+              <td>{{ row[0] }}</td>
+              <td>{{ row[1] }}</td>
+              <td>{{ row[2] }}</td>
+              <td>{{ row[3] }}</td>
+              <td>{{ row[4] }}</td>
+              <td>{{ row[5] }}</td>
+            </tr>
+            {% endfor %}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- jQuery AJAX Script -->
+  <script>
+$(document).ready(function() {
+  $('#searchForm').on('submit', function(e) {
+    e.preventDefault();
+
+    const searchTerm = $('#searchPatients').val().trim();
+    if (searchTerm === "") {
+      alert("Please enter a patient name to search.");
+      return;
+    }
+
+    $.ajax({
+      url: "/searchPatient",
+      type: "POST",
+      data: { searchMe: searchTerm },
+      success: function(response) {
+        $("#patientTableBody").html(response);
+      },
+      error: function(xhr) {
+        alert("Error fetching search results: " + xhr.statusText);
+      }
+    });
+  });
+});
+</script>
+
+</body>
+</html>

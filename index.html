@@ -1,0 +1,144 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta charset="UTF-8">
+  <title>Dental Care Plus</title>
+  <script src="https://use.fontawesome.com/ae84af77c9.js"></script>
+  <link href="https://fonts.googleapis.com/css?family=Baloo" rel="stylesheet">
+
+  <!-- Bootstrap CSS -->
+  <link rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap.min.css"
+        integrity="sha384-BVYiiSIFeK1dGmJRAkycuHAHRg32OmUcww7on3RYdg4Va+PmSTsz/K68vbdEjh4u"
+        crossorigin="anonymous">
+  <link rel="stylesheet"
+        href="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/css/bootstrap-theme.min.css"
+        integrity="sha384-rHyoN1iRsVXV4nD0JutlnGaslCJuC7uwjduW9SVrLvRYooPp2bWYgmgJQIXwl/Sp"
+        crossorigin="anonymous">
+
+  <!-- jQuery + Bootstrap JS -->
+  <script src="https://code.jquery.com/jquery-3.2.1.js"
+          integrity="sha256-DZAnKJ/6XZ9si04Hgrsxu/8s717jcIzLy3oi35EouyE="
+          crossorigin="anonymous"></script>
+  <script src="https://maxcdn.bootstrapcdn.com/bootstrap/3.3.7/js/bootstrap.min.js"
+          integrity="sha384-Tc5IQib027qvyjSMfHjOMaLkfuWVxZxUPnCJA7l2mCWNIpG9mGCD8wGNIcPD7Txa"
+          crossorigin="anonymous"></script>
+
+  <link rel="stylesheet" href="{{ url_for('static', filename='styles/style.css') }}">
+</head>
+
+<body>
+  <!-- Sidebar -->
+  <div class="sideNav">
+    <ul id="navElements">
+      <img id="logoNav" src="{{ url_for('static', filename='styles/logo.png') }}" alt="logo">
+      <a href="{{ url_for('home') }}"><li class="items"><i class="fa fa-home"></i></li></a>
+      <a href="{{ url_for('calendar') }}"><li class="items"><i class="fa fa-calendar"></i></li></a>
+      <a href="{{ url_for('add') }}"><li class="items"><i class="fa fa-plus-square-o"></i></li></a>
+      <a href="{{ url_for('customers') }}"><li class="items"><i class="fa fa-users"></i></li></a>
+      <br><br>
+      <a href="{{ url_for('logout') }}"><li class="items"><i class="fa fa-sign-out"></i></li></a>
+    </ul>
+  </div>
+
+  <!-- Main content -->
+  <div class="contentPane">
+    <h1 id="greeting">Dental Care Plus</h1>
+    <br>
+
+    <div id="today">
+      <div class="headInfo">
+        <span id="infoTop">Date today: {{ current_date }}</span>
+      </div>
+
+      <h2 class="todaySched">Your Schedule for Today</h2>
+
+      <!-- Appointment Table -->
+      <table class="table table-bordered table-striped">
+        <thead>
+          <tr>
+            <th>Appointment ID</th>
+            <th>Time</th>
+            <th>Patient Name</th>
+            <th>Doctor Name</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if appointments %}
+            {% for row in appointments %}
+              <tr>
+                <td>{{ row[0] }}</td>
+                <td>{{ row[1] }}</td>
+                <td>{{ row[2] }}</td>
+                <td>{{ row[3] }}</td>
+              </tr>
+            {% endfor %}
+          {% else %}
+            <tr>
+              <td colspan="4" class="text-center">No appointments for today.</td>
+            </tr>
+          {% endif %}
+        </tbody>
+      </table>
+
+      <br><br>
+
+      <div class="updateContainer">
+        <form action="/updateAppt" id="updateAppt" method="POST">
+          <span class="fieldName">Date</span>
+          <input type="date" class="fields" name="Date" required><br><br>
+
+          <span class="fieldName">Start Time</span>
+          <select class="form-control" name="startTime" required>
+            <option value="8:00">8:00</option><option value="8:30">8:30</option>
+            <option value="9:00">9:00</option><option value="9:30">9:30</option>
+            <option value="10:00">10:00</option><option value="10:30">10:30</option>
+            <option value="11:00">11:00</option><option value="11:30">11:30</option>
+            <option value="1:30">1:30</option><option value="2:00">2:00</option>
+            <option value="2:30">2:30</option><option value="3:00">3:00</option>
+            <option value="3:30">3:30</option><option value="4:00">4:00</option>
+            <option value="4:30">4:30</option>
+          </select><br><br>
+
+          <span class="fieldName">End Time</span>
+          <select class="form-control" name="endTime" required>
+            <option value="8:00">8:00</option><option value="8:30">8:30</option>
+            <option value="9:00">9:00</option><option value="9:30">9:30</option>
+            <option value="10:00">10:00</option><option value="10:30">10:30</option>
+            <option value="11:00">11:00</option><option value="11:30">11:30</option>
+            <option value="1:30">1:30</option><option value="2:00">2:00</option>
+            <option value="2:30">2:30</option><option value="3:00">3:00</option>
+            <option value="3:30">3:30</option><option value="4:00">4:00</option>
+            <option value="4:30">4:30</option>
+          </select><br><br>
+
+          <span class="fieldName">Service</span>
+          <select class="form-control" name="service" required>
+            <option value="Choose an option">Choose an Option</option>
+            <option value="Cleaning">Cleaning</option>
+            <option value="Tooth Extraction">Tooth Extraction</option>
+            <option value="Fillings">Fillings (Pasta)</option>
+            <option value="Dentures">Dentures</option>
+            <option value="X-ray">X-ray</option>
+            <option value="Orthodontics">Orthodontics</option>
+          </select>
+          <br><br>
+
+          <button type="submit" class="btn btn-primary">Submit</button>
+        </form>
+      </div>
+
+      <br>
+      <a href="{{ url_for('rescheduleAppointment') }}" class="btn btn-info">Reschedule Appointment</a>
+
+<a href="{{ url_for('cancel') }}" class="btn btn-danger">Cancel Appointment</a>
+<br><br>
+<a href="{{ url_for('alert_patients') }}" class="btn btn-primary">Alert Today’s Patients</a>
+
+    </div>
+  </div>
+
+  <script src="{{ url_for('static', filename='scripts/script.js') }}"></script>
+  <script src="{{ url_for('static', filename='scripts/rowSelector.js') }}"></script>
+</body>
+</html>
